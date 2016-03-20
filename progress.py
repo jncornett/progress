@@ -5,13 +5,21 @@ from collections import namedtuple
 
 
 def terminal_size():
+
+    """
+    borrowed shamelessly from @pascal:
+        http://stackoverflow.com/a/3010495/1142167
+    """
+
     import fcntl
     import termios
     import struct
 
-    h, w, hp, wp = struct.unpack(
-        'HHHH', fcntl.ioctl(
-            0, termios.TIOCGWINSZ, struct.pack('HHHH', 0, 0, 0, 0)))
+    FMT = 'HHHH'
+    WINSZ = (0,) * len(FMT)
+
+    h, w, _, _ = struct.unpack(
+        FMT, fcntl.ioctl(0, termios.TIOCGWINSZ, struct.pack(FMT, *WINSZ)))
 
     return w, h
 
